@@ -354,6 +354,42 @@ void DeclarativeDBusInterface::typedCall(const QString &method, const QJSValue &
     m_pendingCalls.insert(watcher, callback);
 }
 
+QVariantList DeclarativeDBusInterface::syncTypedCall(const QString &method, const QJSValue &arguments)
+{
+    QDBusMessage message = constructMessage(m_service, m_path, m_interface, method, arguments);
+    if (message.type() == QDBusMessage::InvalidMessage) {
+        qmlInfo(this) << "Invalid message, cannot call method:" << method;
+        return QVariantList();
+    }
+
+    QDBusConnection conn = DeclarativeDBus::connection(m_bus);
+
+    QDBusPendingCall pendingCall = conn.asyncCall(message);
+    QDBusPendingCallWatcher *watcher = new QDBusPendingCallWatcher(pendingCall);
+
+    watcher->waitForFinished();
+
+    QDBusPendingReply<> reply = *watcher;
+
+    if (reply.isError()) {
+        qmlInfo(this) << reply.error();
+        return QVariantList();
+    }
+
+    QDBusMessage messageReply = reply.reply();
+
+    QVariantList results;
+
+    foreach (QVariant argument, messageReply.arguments()) {
+        if (argument.userType() == qMetaTypeId<QDBusArgument>())
+            results << parse(argument.value<QDBusArgument>());
+        else if (argument.userType() == qMetaTypeId<QDBusObjectPath>())
+            results << argument.value<QDBusObjectPath>().path();
+    }
+
+    return results;
+}
+
 QVariant DeclarativeDBusInterface::getProperty(const QString &name)
 {
     QDBusMessage message =

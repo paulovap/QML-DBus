@@ -35,33 +35,19 @@
 #include <QtQml>
 #include <QQmlExtensionPlugin>
 
-// API Version 1.0
-#include "declarativedbusadaptor10.h"
-#include "declarativedbusinterface10.h"
+#include "plugin.h"
 
 // API Version 2.0
 #include "declarativedbus.h"
 #include "declarativedbusadaptor.h"
 #include "declarativedbusinterface.h"
 
-class Q_DECL_EXPORT NemoDBusPlugin : public QQmlExtensionPlugin
+void Plugins::registerTypes(const char *uri)
 {
-    Q_OBJECT
-    Q_PLUGIN_METADATA(IID "org.nemomobile.dbus")
-public:
-    void registerTypes(const char *uri)
-    {
-        Q_ASSERT(uri == QLatin1String("org.nemomobile.dbus"));
+    Q_ASSERT(uri == QLatin1String("QML-DBus"));
 
-        // QML API 1.0 (backwards compatible to 0.0.x versions)
-        qmlRegisterType<DeclarativeDBusAdaptor10>(uri, 1, 0, "DBusAdaptor");
-        qmlRegisterType<DeclarativeDBusInterface10>(uri, 1, 0, "DBusInterface");
-
-        // QML API 2.0 (with deprecated fields removed)
-        qmlRegisterUncreatableType<DeclarativeDBus>(uri, 2, 0, "DBus", "Cannot create DBus objects");
-        qmlRegisterType<DeclarativeDBusAdaptor>(uri, 2, 0, "DBusAdaptor");
-        qmlRegisterType<DeclarativeDBusInterface>(uri, 2, 0, "DBusInterface");
-    }
-};
-
-#include "plugin.moc"
+    // QML API 2.0 (with deprecated fields removed)
+    qmlRegisterUncreatableType<DeclarativeDBus>(uri, 2, 0, "DBus", "Cannot create DBus objects");
+    qmlRegisterType<DeclarativeDBusAdaptor>(uri, 2, 0, "DBusAdaptor");
+    qmlRegisterType<DeclarativeDBusInterface>(uri, 2, 0, "DBusInterface");
+}

@@ -1,5 +1,5 @@
-TARGET = nemodbus
-PLUGIN_IMPORT_PATH = org/nemomobile/dbus
+TARGET = qmldbus
+PLUGIN_IMPORT_PATH = qml-dbus
 QT += dbus qml
 
 QT -= gui
@@ -18,16 +18,12 @@ SOURCES += \
     plugin.cpp \
     declarativedbus.cpp \
     declarativedbusadaptor.cpp \
-    declarativedbusadaptor10.cpp \
-    declarativedbusinterface.cpp \
-    declarativedbusinterface10.cpp
+    declarativedbusinterface.cpp
 
 HEADERS += \
     declarativedbus.h \
     declarativedbusadaptor.h \
-    declarativedbusadaptor10.h \
-    declarativedbusinterface.h \
-    declarativedbusinterface10.h
+    declarativedbusinterface.h
 
 MOC_DIR = $$PWD/.moc
 OBJECTS_DIR = $$PWD/.obj

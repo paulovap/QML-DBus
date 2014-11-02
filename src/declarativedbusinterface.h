@@ -73,7 +73,7 @@ public:
     Q_INVOKABLE void call(const QString &method, const QJSValue &arguments);
     Q_INVOKABLE void typedCall(const QString &method, const QJSValue &arguments,
             const QJSValue &callback=QJSValue::UndefinedValue);
-
+    Q_INVOKABLE QVariantList syncTypedCall(const QString &method, const QJSValue &arguments);
     Q_INVOKABLE QVariant getProperty(const QString &name);
     Q_INVOKABLE void setProperty(const QString &name, const QVariant &value);
 

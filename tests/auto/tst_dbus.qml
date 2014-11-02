@@ -34,7 +34,7 @@
 
 import QtTest 1.0
 import QtQuick 2.0
-import org.nemomobile.dbus 1.0
+import QML-DBus 1.0
 
 Item {
     width: 500; height: 500
