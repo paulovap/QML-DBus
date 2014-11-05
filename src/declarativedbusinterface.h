@@ -47,7 +47,6 @@ class DeclarativeDBusInterface : public QObject, public QQmlParserStatus
     Q_PROPERTY(QString path READ path WRITE setPath NOTIFY pathChanged)
     Q_PROPERTY(QString iface READ interface WRITE setInterface NOTIFY interfaceChanged)
     Q_PROPERTY(DeclarativeDBus::BusType bus READ bus WRITE setBus NOTIFY busChanged)
-    Q_PROPERTY(bool signalsEnabled READ signalsEnabled WRITE setSignalsEnabled NOTIFY signalsEnabledChanged)
 
     Q_INTERFACES(QQmlParserStatus)
 
@@ -93,7 +92,6 @@ signals:
 private slots:
     void pendingCallFinished(QDBusPendingCallWatcher *watcher);
     void signalHandler(const QDBusMessage &message);
-    void connectSignalHandlerCallback(const QString &introspectionData);
 
 private:
     void disconnectSignalHandler();

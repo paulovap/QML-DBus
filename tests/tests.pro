@@ -1,6 +1,10 @@
-TEMPLATE = subdirs
+TEMPLATE=app
+TARGET=tst_dbus
+CONFIG += warn_on qmltestcase
+SOURCES += tst_dbus.cpp
+DEFINES += QUICK_TEST_SOURCE_DIR=\"\\\"$$PWD\\\"\"
 
-target.files = auto/*
-target.path = /opt/tests/qml-dbus/dbus/auto
+QT += qml dbus
 
-INSTALLS += target
+OTHER_FILES += \
+    auto/*

@@ -68,7 +68,7 @@ public:
     void classBegin();
     void componentComplete();
 
-    QString introspect(const QString &path) const;
+    virtual QString introspect(const QString &path) const;
     bool handleMessage(const QDBusMessage &message, const QDBusConnection &connection);
 
     Q_INVOKABLE void emitSignal(const QString &name,

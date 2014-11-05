@@ -10,23 +10,21 @@
 #      QApplication app(argc, argv);
 #
 #      Plugin plugin;
-#      plugin.registerTypes("QML-DBus");
+#      plugin.registerTypes("DBus");
 #
 #      ...
 #  }
 
 INCLUDEPATH += $$PWD
 
-DEPENDPATH += .
-
 HEADERS += \
         $$PWD/declarativedbusadaptor.h \
         $$PWD/declarativedbus.h \
         $$PWD/declarativedbusinterface.h \
-        $$PWD/plugin.h
+    $$PWD/dbusplugin.h
 
 SOURCES += \
         $$PWD/declarativedbusadaptor.cpp \
         $$PWD/declarativedbus.cpp \
         $$PWD/declarativedbusinterface.cpp \
-        $$PWD/plugin.cpp
+    $$PWD/dbusplugin.cpp

@@ -1,2 +1,2 @@
-module QML-DBus
-plugin qmldbus
+module DBus
+plugin DBus

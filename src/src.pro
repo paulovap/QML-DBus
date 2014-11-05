@@ -1,29 +1,30 @@
-TARGET = qmldbus
-PLUGIN_IMPORT_PATH = qml-dbus
-QT += dbus qml
-
-QT -= gui
+TARGET = $$qtLibraryTarget(DBus)
 
 TEMPLATE = lib
-CONFIG += qt plugin hide_symbols
+CONFIG += plugin
 
-target.path = $$[QT_INSTALL_QML]/$$PLUGIN_IMPORT_PATH
-INSTALLS += target
+TARGETPATH = DBus
+PLUGIN_IMPORT_PATH = dbus
 
-qmldir.files += $$_PRO_FILE_PWD_/qmldir
-qmldir.path +=  $$target.path
-INSTALLS += qmldir
+QT += dbus qml
+QT -= gui
 
-SOURCES += \
-    plugin.cpp \
-    declarativedbus.cpp \
-    declarativedbusadaptor.cpp \
-    declarativedbusinterface.cpp
+API_VER=1.0
 
-HEADERS += \
-    declarativedbus.h \
-    declarativedbusadaptor.h \
-    declarativedbusinterface.h
+MOC_DIR = .moc
+OBJECTS_DIR = .obj
 
-MOC_DIR = $$PWD/.moc
-OBJECTS_DIR = $$PWD/.obj
+contains(QT_CONFIG, reduce_exports): CONFIG += hide_symbols
+
+INCLUDEPATH += .
+include(dbus.pri)
+
+importPath = $$[QT_INSTALL_QML]/$$replace(TARGETPATH, \\., /).$$API_VER
+target.path = $${importPath}
+
+qmldir.path = $${importPath}
+qmldir.files += $$PWD/qmldir
+
+
+INSTALLS += target qmldir
+

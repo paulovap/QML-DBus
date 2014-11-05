@@ -235,7 +235,7 @@ bool DeclarativeDBusAdaptor::handleMessage(const QDBusMessage &message, const QD
             }
             map.endMap();
 
-            QDBusMessage reply = message.createReply(QVariantList() << QVariant::fromValue(map));
+            QDBusMessage reply = message.createReply(QVariantList());
             connection.call(reply, QDBus::NoBlock);
 
             return true;

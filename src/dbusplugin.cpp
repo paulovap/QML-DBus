@@ -35,19 +35,26 @@
 #include <QtQml>
 #include <QQmlExtensionPlugin>
 
-#include "plugin.h"
+#include "dbusplugin.h"
 
-// API Version 2.0
 #include "declarativedbus.h"
 #include "declarativedbusadaptor.h"
 #include "declarativedbusinterface.h"
 
-void Plugins::registerTypes(const char *uri)
+DBusPlugin::DBusPlugin(QObject *parent):
+    QQmlExtensionPlugin(parent)
 {
-    Q_ASSERT(uri == QLatin1String("QML-DBus"));
 
-    // QML API 2.0 (with deprecated fields removed)
-    qmlRegisterUncreatableType<DeclarativeDBus>(uri, 2, 0, "DBus", "Cannot create DBus objects");
-    qmlRegisterType<DeclarativeDBusAdaptor>(uri, 2, 0, "DBusAdaptor");
-    qmlRegisterType<DeclarativeDBusInterface>(uri, 2, 0, "DBusInterface");
 }
+
+void DBusPlugin::registerTypes(const char *uri)
+{
+    Q_ASSERT(uri == QLatin1String("DBus"));
+
+    qmlRegisterUncreatableType<DeclarativeDBus>(uri, 1, 0, "DBus", "Cannot create DBus objects");
+    qmlRegisterType<DeclarativeDBusAdaptor>(uri, 1, 0, "DBusAdaptor");
+    qmlRegisterType<DeclarativeDBusInterface>(uri, 1, 0, "DBusInterface");
+}
+
+
+
