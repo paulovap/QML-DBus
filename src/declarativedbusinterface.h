@@ -39,6 +39,9 @@
 
 #include "declarativedbus.h"
 
+/*!
+  \class DeclarativeDBusInterface
+ */
 class DeclarativeDBusInterface : public QObject, public QQmlParserStatus
 {
     Q_OBJECT

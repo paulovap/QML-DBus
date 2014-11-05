@@ -39,6 +39,35 @@
 #include <QUrl>
 #include <QXmlStreamReader>
 
+/*!
+  \qmltype DBusInterface
+  \inqmlmodule DBus
+  \inherits QObject
+  \brief Creates a DBus interface.
+
+  DBusInterface lets you connects to a DBus interface so you can listen to signals and call methods.
+
+  Example usage:
+  \qml
+   import QtQuick 2.0
+   import DBus 1.0
+
+   Item {
+       width: 800
+       height: 600
+
+       DBusInterface {
+         service:"org.test"
+         path: "/org/test"
+         iface:"org.test"
+
+         function signal_hello(result){
+           console.log("Hello: " + result)
+         }
+       }
+   }
+   \endqml
+*/
 DeclarativeDBusInterface::DeclarativeDBusInterface(QObject *parent)
 :   QObject(parent), m_bus(DeclarativeDBus::SessionBus), m_componentCompleted(false), m_signalsEnabled(false)
 {

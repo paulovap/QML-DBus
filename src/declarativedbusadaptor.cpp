@@ -34,6 +34,31 @@
 
 #include "declarativedbusinterface.h"
 
+/*!
+  \qmltype DBusAdaptor
+  \inqmlmodule DBus
+  \inherits QDBusVirtualObject
+  \brief Creates a DBus adaptor.
+
+  DBusAdaptor lets you register a DBus object, emit signals and make methods available.
+
+  Example usage:
+  \qml
+   import QtQuick 2.0
+   import DBus 1.0
+
+   Item {
+       width: 800
+       height: 600
+
+       DBusAdaptor {
+        service:"org.test"
+        path: "/org/test"
+        iface:"org.test"
+       }
+   }
+   \endqml
+*/
 DeclarativeDBusAdaptor::DeclarativeDBusAdaptor(QObject *parent)
     : QDBusVirtualObject(parent), m_bus(DeclarativeDBus::SessionBus)
 {
@@ -43,6 +68,10 @@ DeclarativeDBusAdaptor::~DeclarativeDBusAdaptor()
 {
 }
 
+/*!
+  \qmlproperty string DBusAdaptor::service
+  \brief Name of the dbus service.
+*/
 QString DeclarativeDBusAdaptor::service() const
 {
     return m_service;
@@ -56,6 +85,10 @@ void DeclarativeDBusAdaptor::setService(const QString &service)
     }
 }
 
+/*!
+  \qmlproperty string DBusAdaptor::path
+  \brief Path of the dbus object to be registered.
+*/
 QString DeclarativeDBusAdaptor::path() const
 {
     return m_path;
@@ -69,6 +102,10 @@ void DeclarativeDBusAdaptor::setPath(const QString &path)
     }
 }
 
+/*!
+  \qmlproperty string DBusAdaptor::interface
+  \brief Name of the interface.
+*/
 QString DeclarativeDBusAdaptor::interface() const
 {
     return m_interface;
