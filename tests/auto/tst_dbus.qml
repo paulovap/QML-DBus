@@ -52,7 +52,7 @@ Item {
                 <method name="test"><arg name="result" type="b" direction="out"/></method>
                 <signal name="Hello"> <arg name="result" type="s" direction="out"/></signal>
              </interface>'
-
+        bus: DBusAdaptor.SessionBus
         function test(){
             return true
         }
@@ -67,7 +67,7 @@ Item {
         service: "org.nemomobile.dbus.test"
         iface: "org.nemomobile.dbus.test.Interface"
         path: "/org/nemomobile/dbus/test"
-
+        bus: DBusInterface.SessionBus
         property string helloResult: "bar"
 
         function signal_Hello(result){

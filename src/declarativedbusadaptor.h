@@ -33,8 +33,6 @@
 
 #include <QDBusVirtualObject>
 
-#include "declarativedbus.h"
-
 /*!
   \class DeclarativeDBusAdaptor
  */
@@ -45,11 +43,18 @@ class DeclarativeDBusAdaptor : public QDBusVirtualObject, public QQmlParserStatu
     Q_PROPERTY(QString path READ path WRITE setPath NOTIFY pathChanged)
     Q_PROPERTY(QString iface READ interface WRITE setInterface NOTIFY interfaceChanged)
     Q_PROPERTY(QString xml READ xml WRITE setXml NOTIFY xmlChanged)
-    Q_PROPERTY(DeclarativeDBus::BusType bus READ bus WRITE setBus NOTIFY busChanged)
+    Q_PROPERTY(BusType bus READ bus WRITE setBus NOTIFY busChanged)
 
     Q_INTERFACES(QQmlParserStatus)
 
+    Q_ENUMS(BusType)
 public:
+    enum BusType {
+        SystemBus,
+        SessionBus
+    };
+
+
     DeclarativeDBusAdaptor(QObject *parent = 0);
     ~DeclarativeDBusAdaptor();
 
@@ -65,8 +70,8 @@ public:
     QString xml() const;
     void setXml(const QString &xml);
 
-    DeclarativeDBus::BusType bus() const;
-    void setBus(DeclarativeDBus::BusType bus);
+    BusType bus() const;
+    void setBus(BusType bus);
 
     void classBegin();
     void componentComplete();
@@ -89,7 +94,7 @@ private:
     QString m_path;
     QString m_interface;
     QString m_xml;
-    DeclarativeDBus::BusType m_bus;
+    BusType m_bus;
 };
 
 #endif

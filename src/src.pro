@@ -11,9 +11,6 @@ QT -= gui
 
 API_VER=1.0
 
-MOC_DIR = .moc
-OBJECTS_DIR = .obj
-
 contains(QT_CONFIG, reduce_exports): CONFIG += hide_symbols
 
 INCLUDEPATH += .

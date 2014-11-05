@@ -19,12 +19,10 @@ INCLUDEPATH += $$PWD
 
 HEADERS += \
         $$PWD/declarativedbusadaptor.h \
-        $$PWD/declarativedbus.h \
         $$PWD/declarativedbusinterface.h \
     $$PWD/dbusplugin.h
 
 SOURCES += \
         $$PWD/declarativedbusadaptor.cpp \
-        $$PWD/declarativedbus.cpp \
         $$PWD/declarativedbusinterface.cpp \
     $$PWD/dbusplugin.cpp

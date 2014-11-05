@@ -37,8 +37,6 @@
 #include <QDBusPendingCallWatcher>
 #include <QDBusMessage>
 
-#include "declarativedbus.h"
-
 /*!
   \class DeclarativeDBusInterface
  */
@@ -49,11 +47,17 @@ class DeclarativeDBusInterface : public QObject, public QQmlParserStatus
     Q_PROPERTY(QString service READ service WRITE setService NOTIFY serviceChanged)
     Q_PROPERTY(QString path READ path WRITE setPath NOTIFY pathChanged)
     Q_PROPERTY(QString iface READ interface WRITE setInterface NOTIFY interfaceChanged)
-    Q_PROPERTY(DeclarativeDBus::BusType bus READ bus WRITE setBus NOTIFY busChanged)
+    Q_PROPERTY(BusType bus READ bus WRITE setBus NOTIFY busChanged)
 
     Q_INTERFACES(QQmlParserStatus)
 
+    Q_ENUMS(BusType)
 public:
+    enum BusType {
+        SystemBus,
+        SessionBus
+    };
+
     DeclarativeDBusInterface(QObject *parent = 0);
     ~DeclarativeDBusInterface();
 
@@ -66,8 +70,8 @@ public:
     QString interface() const;
     void setInterface(const QString &interface);
 
-    DeclarativeDBus::BusType bus() const;
-    void setBus(DeclarativeDBus::BusType bus);
+    BusType bus() const;
+    void setBus(BusType bus);
 
     bool signalsEnabled() const;
     void setSignalsEnabled(bool enabled);
@@ -100,10 +104,11 @@ private:
     void disconnectSignalHandler();
     void connectSignalHandler();
 
+    QDBusConnection connection(BusType bus);
     QString m_service;
     QString m_path;
     QString m_interface;
-    DeclarativeDBus::BusType m_bus;
+    BusType m_bus;
     QMap<QDBusPendingCallWatcher *, QJSValue> m_pendingCalls;
     QMap<QString, QMetaMethod> m_signals;
     bool m_componentCompleted;

@@ -60,7 +60,7 @@
    \endqml
 */
 DeclarativeDBusAdaptor::DeclarativeDBusAdaptor(QObject *parent)
-    : QDBusVirtualObject(parent), m_bus(DeclarativeDBus::SessionBus)
+    : QDBusVirtualObject(parent), m_bus(DeclarativeDBusAdaptor::SessionBus)
 {
 }
 
@@ -138,12 +138,12 @@ void DeclarativeDBusAdaptor::setXml(const QString &xml)
     }
 }
 
-DeclarativeDBus::BusType DeclarativeDBusAdaptor::bus() const
+DeclarativeDBusAdaptor::BusType DeclarativeDBusAdaptor::bus() const
 {
     return m_bus;
 }
 
-void DeclarativeDBusAdaptor::setBus(DeclarativeDBus::BusType bus)
+void DeclarativeDBusAdaptor::setBus(DeclarativeDBusAdaptor::BusType bus)
 {
     if (m_bus != bus) {
         m_bus = bus;
@@ -157,7 +157,9 @@ void DeclarativeDBusAdaptor::classBegin()
 
 void DeclarativeDBusAdaptor::componentComplete()
 {
-    QDBusConnection conn = DeclarativeDBus::connection(m_bus);
+    QDBusConnection conn = (m_bus == DeclarativeDBusAdaptor::SystemBus) ?
+                QDBusConnection::systemBus() :
+                QDBusConnection::sessionBus();
 
     // Register service name only if it has been set.
     if (!m_service.isEmpty()) {
@@ -377,7 +379,9 @@ bool DeclarativeDBusAdaptor::handleMessage(const QDBusMessage &message, const QD
                             arguments[9]);
                 if (success) {
                     QDBusMessage reply = retVal.isValid() ? message.createReply(retVal) : message.createReply();
-                    QDBusConnection conn = DeclarativeDBus::connection(m_bus);
+                    QDBusConnection conn = (m_bus == DeclarativeDBusAdaptor::SystemBus) ?
+                                QDBusConnection::systemBus() :
+                                QDBusConnection::sessionBus();
                     conn.send(reply);
                 }
                 return success;
@@ -399,7 +403,9 @@ bool DeclarativeDBusAdaptor::handleMessage(const QDBusMessage &message, const QD
 void DeclarativeDBusAdaptor::emitSignal(const QString &name, const QJSValue &arguments)
 {
     QDBusMessage signal = QDBusMessage::createSignal(m_path, m_interface, name);
-    QDBusConnection conn = DeclarativeDBus::connection(m_bus);
+    QDBusConnection conn = (m_bus == DeclarativeDBusAdaptor::SystemBus) ?
+                QDBusConnection::systemBus() :
+                QDBusConnection::sessionBus();
 
     if (!arguments.isUndefined()) {
         signal.setArguments(DeclarativeDBusInterface::argumentsFromScriptValue(arguments));

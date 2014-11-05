@@ -69,7 +69,7 @@
    \endqml
 */
 DeclarativeDBusInterface::DeclarativeDBusInterface(QObject *parent)
-:   QObject(parent), m_bus(DeclarativeDBus::SessionBus), m_componentCompleted(false), m_signalsEnabled(false)
+:   QObject(parent), m_bus(DeclarativeDBusInterface::SessionBus), m_componentCompleted(false), m_signalsEnabled(false)
 {
 }
 
@@ -118,12 +118,12 @@ void DeclarativeDBusInterface::setInterface(const QString &interface)
     }
 }
 
-DeclarativeDBus::BusType DeclarativeDBusInterface::bus() const
+DeclarativeDBusInterface::BusType DeclarativeDBusInterface::bus() const
 {
     return m_bus;
 }
 
-void DeclarativeDBusInterface::setBus(DeclarativeDBus::BusType bus)
+void DeclarativeDBusInterface::setBus(DeclarativeDBusInterface::BusType bus)
 {
     if (m_bus != bus) {
         m_bus = bus;
@@ -163,7 +163,7 @@ void DeclarativeDBusInterface::call(const QString &method, const QJSValue &argum
                 method);
     message.setArguments(dbusArguments);
 
-    QDBusConnection conn = DeclarativeDBus::connection(m_bus);
+    QDBusConnection conn = connection(m_bus);
 
     if (!conn.send(message))
         qmlInfo(this) << conn.lastError();
@@ -327,7 +327,7 @@ void DeclarativeDBusInterface::typedCall(const QString &method, const QJSValue &
         return;
     }
 
-    QDBusConnection conn = DeclarativeDBus::connection(m_bus);
+    QDBusConnection conn = connection(m_bus);
 
     if (callback.isUndefined()) {
         // Call without waiting for return value (callback is undefined)
@@ -358,7 +358,7 @@ QVariantList DeclarativeDBusInterface::syncTypedCall(const QString &method, cons
         return QVariantList();
     }
 
-    QDBusConnection conn = DeclarativeDBus::connection(m_bus);
+    QDBusConnection conn = connection(m_bus);
 
     QDBusPendingCall pendingCall = conn.asyncCall(message);
     QDBusPendingCallWatcher *watcher = new QDBusPendingCallWatcher(pendingCall);
@@ -401,7 +401,7 @@ QVariant DeclarativeDBusInterface::getProperty(const QString &name)
 
     message.setArguments(args);
 
-    QDBusConnection conn = DeclarativeDBus::connection(m_bus);
+    QDBusConnection conn = connection(m_bus);
 
     QDBusMessage reply = conn.call(message);
     if (reply.type() == QDBusMessage::ErrorMessage)
@@ -427,7 +427,7 @@ void DeclarativeDBusInterface::setProperty(const QString &name, const QVariant &
     args.append(name);
     args.append(value);
 
-    QDBusConnection conn = DeclarativeDBus::connection(m_bus);
+    QDBusConnection conn = connection(m_bus);
     if (!conn.send(message))
         qmlInfo(this) << conn.lastError();
 }
@@ -495,7 +495,7 @@ void DeclarativeDBusInterface::signalHandler(const QDBusMessage &message)
 
 void DeclarativeDBusInterface::connectSignalHandler()
 {
-    QDBusConnection conn = DeclarativeDBus::connection(m_bus);
+    QDBusConnection conn = connection(m_bus);
 
     const QMetaObject *meta = this->metaObject();
 
@@ -514,12 +514,19 @@ void DeclarativeDBusInterface::connectSignalHandler()
     qDebug() << "Signals:  " << m_signals.keys();
 }
 
+QDBusConnection DeclarativeDBusInterface::connection(DeclarativeDBusInterface::BusType bus)
+{
+    return (bus == DeclarativeDBusInterface::SystemBus) ?
+                QDBusConnection::systemBus() :
+                QDBusConnection::sessionBus();
+}
+
 void DeclarativeDBusInterface::disconnectSignalHandler()
 {
     if (m_signals.isEmpty())
         return;
 
-    QDBusConnection conn = DeclarativeDBus::connection(m_bus);
+    QDBusConnection conn = connection(m_bus);
 
     foreach (const QString &signal, m_signals.keys()) {
         conn.disconnect(m_service, m_path, m_interface, signal,

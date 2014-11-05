@@ -37,7 +37,6 @@
 
 #include "dbusplugin.h"
 
-#include "declarativedbus.h"
 #include "declarativedbusadaptor.h"
 #include "declarativedbusinterface.h"
 
@@ -51,7 +50,6 @@ void DBusPlugin::registerTypes(const char *uri)
 {
     Q_ASSERT(uri == QLatin1String("DBus"));
 
-    qmlRegisterUncreatableType<DeclarativeDBus>(uri, 1, 0, "DBus", "Cannot create DBus objects");
     qmlRegisterType<DeclarativeDBusAdaptor>(uri, 1, 0, "DBusAdaptor");
     qmlRegisterType<DeclarativeDBusInterface>(uri, 1, 0, "DBusInterface");
 }
