@@ -509,9 +509,6 @@ void DeclarativeDBusInterface::connectSignalHandler()
                          this, SLOT(signalHandler(QDBusMessage)));
         }
     }
-
-
-    qDebug() << "Signals:  " << m_signals.keys();
 }
 
 QDBusConnection DeclarativeDBusInterface::connection(DeclarativeDBusInterface::BusType bus)
