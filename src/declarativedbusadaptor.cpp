@@ -304,11 +304,8 @@ bool DeclarativeDBusAdaptor::handleMessage(const QDBusMessage &message, const QD
         return false;
     }
 
-    // Support interfaces with method names starting with an uppercase letter.
-    // com.example.interface.Foo -> com.example.interface.rcFoo (remote-call Foo).
-    if (!member.isEmpty() && member.at(0).isUpper())
-        member = "rc" + member;
-
+    if (!member.isEmpty())
+        member = "method_" + member;
     for (int methodIndex = meta->methodOffset(); methodIndex < meta->methodCount(); ++methodIndex) {
         const QMetaMethod method = meta->method(methodIndex);
         const QList<QByteArray> parameterTypes = method.parameterTypes();
@@ -388,15 +385,14 @@ bool DeclarativeDBusAdaptor::handleMessage(const QDBusMessage &message, const QD
             }
         }
     }
-    QByteArray signature = message.member().toLatin1() + "(";
+    QByteArray signature = message.member().toLatin1();
     for (int i = 0; i < dbusArguments.count(); ++i) {
         if (i > 0)
             signature += ",";
         signature += dbusArguments.at(i).typeName();
     }
-    signature += ")";
 
-    qmlInfo(this) << "No method with the signature " << signature;
+    qmlInfo(this) << "No method with the signature: method_" + signature;
     return false;
 }
 

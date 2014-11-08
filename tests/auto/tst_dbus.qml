@@ -49,11 +49,11 @@ Item {
         iface: "org.nemomobile.dbus.test.Interface"
         path: "/org/nemomobile/dbus/test"
         xml:'<interface name="org.nemomobile.dbus.test.Interfaced">
-                <method name="test"><arg name="result" type="b" direction="out"/></method>
+                <method name="Test"><arg name="result" type="b" direction="out"/></method>
                 <signal name="Hello"> <arg name="result" type="s" direction="out"/></signal>
              </interface>'
         bus: DBusAdaptor.SessionBus
-        function test(){
+        function method_Test(){
             return true
         }
 
@@ -79,7 +79,7 @@ Item {
         name:"Test DbusConnection"
 
         function test_boolMethod(){
-            compare(dbusInterface.syncTypedCall("test", undefined)[0] , true)
+            compare(dbusInterface.syncTypedCall("Test", undefined)[0] , true)
         }
 
         function test_emitString(){
