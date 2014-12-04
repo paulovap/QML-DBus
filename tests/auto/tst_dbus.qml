@@ -49,12 +49,21 @@ Item {
         iface: "org.nemomobile.dbus.test.Interface"
         path: "/org/nemomobile/dbus/test"
         xml:'<interface name="org.nemomobile.dbus.test.Interfaced">
-                <method name="Test"><arg name="result" type="b" direction="out"/></method>
+                <method name="TestBool"><arg name="result" type="b" direction="out"/></method>
+                <method name="TestBoolIn"><arg name="argument" type="b" direction="in"/></method>
+                <method name="TestString"><arg name="result" type="s" direction="out"/></method>
                 <signal name="Hello"> <arg name="result" type="s" direction="out"/></signal>
              </interface>'
         bus: DBusAdaptor.SessionBus
-        function method_Test(){
+        function method_TestBoolIn(argument){
+            console.log("shiiittt: " + argument)
+        }
+
+        function method_TestBool(){
             return true
+        }
+        function method_TestString(){
+            return "asdf"
         }
 
         function emitHello(){
@@ -78,8 +87,16 @@ Item {
     TestCase{
         name:"Test DbusConnection"
 
+        function test_boolMethodIn(){
+            compare(dbusInterface.syncTypedCall("TestBoolIn", {type:"b", value:true})[0], false)
+        }
+
         function test_boolMethod(){
-            compare(dbusInterface.syncTypedCall("Test", undefined)[0] , true)
+            compare(dbusInterface.syncTypedCall("TestBool", undefined)[0] , true)
+        }
+        function test_stringMethod(){
+            console.log("test string" + dbusInterface.syncTypedCall("TestString", undefined)[0])
+            compare(dbusInterface.syncTypedCall("TestString", undefined)[0] , "asdf")
         }
 
         function test_emitString(){
